@@ -15,22 +15,22 @@ declare -A SILVER_DATA
 scrape_kitco_prices() {
     local metal=$1
     local -n data_ref=$2  # Reference to array
-    
+
     local url="https://www.kitco.com/charts/$metal"
-    
+
     # Get current price
     local price=$(curl -s "$url" | \
         grep -oP '<h3[^>]*>\K[0-9,.]+' | tr -d ',' | head -1)
-    
+
     # Get 24h high/low values
     local values=($(curl -s "$url" | \
         grep -oP '(?<=<div>)[0-9.]+(?=</div>)' | tr -d ','))
-    
+
     # Store in array
-    data_ref["price"]="$price"
+        data_ref["price"]="$price"
     data_ref["high"]="${values[0]}"
     data_ref["low"]="${values[1]}"
-    
+
     echo "DEBUG: Found $metal - Price: ${data_ref[price]}, High: ${data_ref[high]}, Low: ${data_ref[low]}"
 }
 
@@ -49,7 +49,7 @@ echo "=== SILVER ==="
 scrape_kitco_prices "silver" SILVER_DATA
 echo "Silver Price: ${SILVER_DATA[price]} USD"
 echo "24h High: ${SILVER_DATA[high]}"
-echo "24h Low: ${SILVER_DATA[low]}"
+echo "24h Low: ${SILVER_DATA[low]}"echo "[$TIMESTAMP] Gold Price: ${GOLD_DATA[price]} USD (High: ${GOLD_DATA[high]}, Low: ${GOLD_DATA[low]})" >> $LOG_FILE
 
 echo "[$TIMESTAMP] Silver Price: ${SILVER_DATA[price]} USD (High: ${SILVER_DATA[high]}, Low: ${SILVER_DATA[low]})" >> $LOG_FILE
 
@@ -85,6 +85,14 @@ CREATE TABLE IF NOT EXISTS metal_prices (
 );
 
 -- Insert or update Gold data using ON DUPLICATE KEY UPDATE
+INSERT INTO metal_prices (metal_type, price, currency, high_price, low_price, timestamp) 
+VALUES ('gold', ${GOLD_DATA[price]}, 'USD', ${GOLD_DATA[high]}, ${GOLD_DATA[low]}, '$TIMESTAMP')
+ON DUPLICATE KEY UPDATE 
+    price = VALUES(price),
+    high_price = VALUES(high_price),
+    low_price = VALUES(low_price);
+
+-- Insert or update Silver data using ON DUPLICATE KEY UPDATE
 INSERT INTO metal_prices (metal_type, price, currency, high_price, low_price, timestamp) 
 VALUES ('gold', ${GOLD_DATA[price]}, 'USD', ${GOLD_DATA[high]}, ${GOLD_DATA[low]}, '$TIMESTAMP')
 ON DUPLICATE KEY UPDATE 
