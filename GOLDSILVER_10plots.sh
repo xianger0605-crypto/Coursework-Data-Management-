@@ -242,7 +242,7 @@ echo "3. Creating Gold 12PM Noon Prices (Past Week) graph..."
 
 # Debug: Show what data we have
 echo "Gold noon prices data sample:"
-head -5 data/gold_noon_prices_fixed.txt
+head -7 data/gold_noon_prices_fixed.txt
 echo ""
 
 gnuplot << EOF
@@ -261,8 +261,8 @@ set grid
 set grid lt 1 lc rgb '#dddddd' lw 1
 
 # Manually set y-axis range for gold (based on your data 4197-4211)
-set yrange [4190:4220]
-set ytics 4190,5,4220
+set yrange [4190:4300]
+set ytics 4190,5,4300
 set format y "%.0f"
 
 # Use bars for better visibility
@@ -282,7 +282,7 @@ echo "4. Creating Silver 12PM Noon Prices (Past Week) graph..."
 
 # Debug: Show what data we have
 echo "Silver noon prices data sample:"
-head -5 data/silver_noon_prices_fixed.txt
+head -7 data/silver_noon_prices_fixed.txt
 echo ""
 
 gnuplot << EOF
@@ -301,8 +301,8 @@ set grid
 set grid lt 1 lc rgb '#dddddd' lw 1
 
 # Manually set y-axis range for silver (based on your data 58.27-60.88)
-set yrange [58:61]
-set ytics 58,0.5,61
+set yrange [58:64]
+set ytics 58,0.5,64
 set format y "%.2f"
 
 # Use bars for better visibility
@@ -311,7 +311,7 @@ set boxwidth 0.6 relative
 set style line 1 lc rgb '#C0C0C0'
 
 # Simple check if file exists and has data
-plot 'data/silver_noon_prices_fixed.txt' using 1:2 with boxes ls 1 title 'Silver Price at Noon', \
+plot 'data/silver_noon_prices_fixed.txt' using 1:3 with boxes ls 1 title 'Silver Price at Noon', \
      '' using 1:2:2 with labels offset 0,1 font ',10' notitle
 EOF
 
@@ -385,7 +385,7 @@ set grid lt 1 lc rgb '#dddddd' lw 1
 set style line 1 lc rgb '#FFD700' lt 1 lw 2 pt 7 ps 0.8
 
 # Plot with time
-plot 'data/gold_dec9_hourly.txt' using 1:2 with linespoints ls 1 title 'Gold Price'
+plot 'data/gold_dec9_hourly.txt' using 1:3 with linespoints ls 1 title 'Gold Price'
 EOF
 
 # ====================
@@ -412,7 +412,7 @@ set grid lt 1 lc rgb '#dddddd' lw 1
 set style line 1 lc rgb '#C0C0C0' lt 1 lw 2 pt 5 ps 0.8
 
 # Plot with time
-plot 'data/silver_dec9_hourly.txt' using 1:2 with linespoints ls 1 title 'Silver Price'
+plot 'data/silver_dec9_hourly.txt' using 1:3 with linespoints ls 1 title 'Silver Price'
 EOF
 
 # ====================
